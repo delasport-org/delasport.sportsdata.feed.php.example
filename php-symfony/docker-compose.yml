@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  result.settlement.feed:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: php.consumer
+    restart: on-failure
+    environment: {
+      APP_ENV: dev,
+      APP_DEBUG: 1,
+      BUILDER_TYPE: messenger:consume settlement_result,
+      MESSENGER_TOPIC_NAME: 'feed.sportsdata.pilot.settlement.result'
+    }
+
+  markets.feed:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: php.consumer
+    environment: {
+      APP_ENV: dev,
+      APP_DEBUG: 1,
+      BUILDER_TYPE: messenger:consume market,
+      MESSENGER_TOPIC_NAME: 'feed.sportsdata.pilot.full.market'
+    }
+
+  events.feed:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: php.consumer
+    environment: {
+      APP_ENV: dev,
+      APP_DEBUG: 1,
+      BUILDER_TYPE: messenger:consume event,
+      MESSENGER_TOPIC_NAME: 'feed.sportsdata.pilot.full.event.live'
+    }

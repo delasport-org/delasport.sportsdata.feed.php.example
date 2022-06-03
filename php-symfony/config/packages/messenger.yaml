@@ -1,0 +1,24 @@
+framework:
+    messenger:
+        # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
+        # failure_transport: failed
+        transports:
+            # https://symfony.com/doc/current/messenger.html#transport-configuration
+            # failed: 'doctrine://default?queue_name=failed'
+            # async: '%env(resolve:MESSENGER_TRANSPORT_DSN)%'
+            # sync: 'sync://'
+
+            settlement_result:
+                dsn:  '%env(resolve:MESSENGER_TRANSPORT_DSN)%'
+                serializer: App\Kafka\Serializer\SettlementSerializer
+            event:
+                dsn: '%env(resolve:MESSENGER_TRANSPORT_DSN)%'
+                serializer: App\Kafka\Serializer\EventSerializer
+            market:
+                dsn: '%env(resolve:MESSENGER_TRANSPORT_DSN)%'
+                serializer: App\Kafka\Serializer\MarketSerializer
+
+        routing:
+            App\Kafka\Message\Settlement\ResultSettlementMessage: settlement_result
+            App\Kafka\Message\Event\EventMessage: event
+            App\Kafka\Message\Market\MarketMessage: market

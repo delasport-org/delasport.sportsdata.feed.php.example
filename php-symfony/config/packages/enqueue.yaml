@@ -1,0 +1,19 @@
+enqueue:
+  default:
+    client: ~
+    transport:
+      commit_async: true
+      dsn: "rdkafka://"
+      factory_service: 'App\Kafka\RdKafkaConnectionFactory'
+
+      global:
+        # debug: all
+        group.id: pilot.php
+        metadata.broker.list: "%env(KAFKA_BROKER_LIST)%"
+        security.protocol: "%env(CONFLUENT_SECURITY)%"
+        sasl.username: "%env(CONFLUENT_API_KEY)%"
+        sasl.password: "%env(CONFLUENT_API_SECRET)%"
+        sasl.mechanism: PLAIN
+
+      topic:
+        auto.offset.reset: beginning
