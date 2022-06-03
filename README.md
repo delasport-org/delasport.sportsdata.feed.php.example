@@ -1,8 +1,7 @@
 B2B Kafka feed
 ==============
 
-##PHP Clients
-### Base requirements
+## Base requirements
 * php: ^8.0
 * rdkafka
 
@@ -16,8 +15,12 @@ B2B Kafka feed
 * Run all php consumers `docker-compose up -d`
 
 ### Development
-**don't forget to turn on VPN connection**
 ```bash
+# Add environment variables
+  CONFLUENT_API_KEY= ''
+  CONFLUENT_API_SECRET=''
+  KAFKA_BROKER_LIST=''
+  
 # Launch container
 docker-compose run --rm <service-name> bash
 
