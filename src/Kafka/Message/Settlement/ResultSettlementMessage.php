@@ -9,24 +9,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class ResultSettlementMessage implements AsyncMessageInterface, \JsonSerializable
 {
-    protected ArrayCollection $odds;
 
     public function __construct(
         protected string $id,
+        protected string $selectionStatus,
+        protected string $oddId,
+        protected string $marketId,
         protected string $eventId,
         protected string $marketTypeId,
         protected string $sportId,
         protected string $leagueId,
         protected string $foreignKey,
         protected int $timestamp
-    ) {
-        $this->odds = new ArrayCollection();
-    }
-
-    public function addOdd(Odd $odd): void
-    {
-        $this->odds->add($odd);
-    }
+    ) { }
 
     public function jsonSerialize(): array
     {
@@ -37,12 +32,14 @@ class ResultSettlementMessage implements AsyncMessageInterface, \JsonSerializabl
     {
         return [
             'id' => $this->id,
+            'selectionStatus' => $this->selectionStatus,
+            'oddId' => $this->oddId,
+            'marketId' => $this->marketId,
             'eventId' => $this->eventId,
             'marketTypeId' => $this->marketTypeId,
             'sportId' => $this->sportId,
             'leagueId' => $this->leagueId,
             'foreignKey' => $this->foreignKey,
-            'odds' => $this->odds->toArray(),
             'timestamp' => $this->timestamp
         ];
     }
@@ -51,21 +48,16 @@ class ResultSettlementMessage implements AsyncMessageInterface, \JsonSerializabl
     {
         $message = new self(
             $data['id'],
-            $data['eventId'],
-            $data['marketTypeId'],
-            $data['sportId'],
-            $data['leagueId'],
-            $data['foreignKey'],
+            $data['selectionStatus'],
+            (string)$data['oddId'],
+            (string)$data['marketId'],
+            (string)$data['eventId'],
+            (string)$data['marketTypeId'],
+            (string)$data['sportId'],
+            (string)$data['leagueId'],
+            (string)$data['foreignKey'],
             $data['timestamp'] ?? time()
         );
-
-        foreach ($data['odds'] as $oddData) {
-            $message->addOdd(
-                new Odd(
-                    $oddData['id'],
-                    $oddData['selectionStatus'])
-            );
-        }
 
         return $message;
     }
